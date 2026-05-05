@@ -1,0 +1,18 @@
+$kind: http-request
+name: Update an event
+url: "{{BASE_URL}}events/1"
+method: PUT
+headers:
+  Accept: application/json
+body:
+  type: json
+  content: "{\r
+
+    \    \"name\": \"name is updated again\",\r
+
+    \    \"start_time\": \"2025-05-06 18:00:00\",\r
+
+    \    \"end_time\": \"2025-07-02 12:00:00\"\r
+
+    }"
+order: 4406789067680016
