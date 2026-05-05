@@ -1,6 +1,6 @@
 $kind: http-request
 name: Singe event
-url: "{{BASE_URL}}events/1"
+url: "{{BASE_URL}}events/2"
 method: GET
 headers:
   - key: Accept
