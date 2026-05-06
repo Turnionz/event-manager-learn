@@ -3,3 +3,6 @@ values:
   - key: BASE_URL
     value: ''
     enabled: true
+  - key: TOKEN
+    value: ''
+    enabled: true

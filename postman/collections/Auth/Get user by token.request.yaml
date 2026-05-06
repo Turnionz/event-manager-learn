@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{BASE_URL}}user"
+method: GET
+headers:
+  Accept: application/json
+body:
+  type: formdata
+  content: []
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN}}"
+order: 2163464748361256
