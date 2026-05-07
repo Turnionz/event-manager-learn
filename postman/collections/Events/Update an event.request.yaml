@@ -1,6 +1,6 @@
 $kind: http-request
 name: Update an event
-url: "{{BASE_URL}}events/1"
+url: "{{BASE_URL}}events/2"
 method: PUT
 headers:
   Accept: application/json
@@ -8,11 +8,15 @@ body:
   type: json
   content: "{\r
 
-    \    \"name\": \"name is updated again\",\r
+    \    \"name\": \"name is updated again2\",\r
 
     \    \"start_time\": \"2025-05-06 18:00:00\",\r
 
     \    \"end_time\": \"2025-07-02 12:00:00\"\r
 
     }"
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN}}"
 order: 4406789067680016

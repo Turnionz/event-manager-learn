@@ -7,14 +7,21 @@ use App\Http\Resources\AttendeeResource;
 use App\Http\Traits\CanLoadRelationships;
 use App\Models\Attendee;
 use App\Models\Event;
-use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class AttendeeController extends Controller
+class AttendeeController extends Controller implements HasMiddleware
 {
     use CanLoadRelationships;
 
     private $relations = ['user'];
+
+    public function __construct()
+    {
+        $this->middleware();
+    }
 
     public function index(Event $event)
     {
@@ -47,10 +54,22 @@ class AttendeeController extends Controller
     }
 
     // Not setting $event to Event to not load it since we don't need it here
-    public function destroy(string $event, Attendee $attendee)
+    public function destroy(Event $event, Attendee $attendee)
     {
+        if (Gate::denies('delete-attendee', $event, $attendee)) {
+            abort(403, 'You are not authorized to do this action');
+        }
+
         $attendee->delete();
 
         return response(status: 204);
+    }
+
+    // Implementation of middleware method
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('auth:sanctum', except: ['index', 'show', 'update'])
+        ];
     }
 }

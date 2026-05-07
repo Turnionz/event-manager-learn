@@ -7,12 +7,20 @@ use App\Http\Resources\EventResource;
 use App\Http\Traits\CanLoadRelationships;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class EventController extends Controller
+class EventController extends Controller implements HasMiddleware
 {
-    use CanLoadRelationships;
+    use CanLoadRelationships, AuthorizesRequests;
 
     private array $relations = ['user', 'attendees', 'attendees.user'];
+
+    public function __construct()
+    {
+        $this->middleware();
+    }
 
     public function index()
     {
@@ -64,5 +72,19 @@ class EventController extends Controller
         $event->delete();
 
         return response(status: 204);
+    }
+
+    // Implementation of middleware method using Policies
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('auth:sanctum', except: ['index', 'show']),
+
+            new Middleware('can:viewAny,' . Event::class, only: ['index']),
+            new Middleware('can:view,event', only: ['show']),
+            new Middleware('can:create,' . Event::class, only: ['create', 'store']),
+            new Middleware('can:update,event', only: ['edit', 'update']),
+            new Middleware('can:delete,event', only: ['destroy'])
+        ];
     }
 }

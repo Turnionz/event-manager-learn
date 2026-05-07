@@ -1,9 +1,8 @@
 $kind: http-request
-name: Delete an event
-url: "{{BASE_URL}}events/1"
-method: DELETE
+url: "{{BASE_URL}}logout"
+method: POST
 headers:
-  Accept: application/json
+  Accept: applications/json
 body:
   type: json
   content: ""
@@ -11,4 +10,4 @@ auth:
   type: bearer
   credentials:
     token: "{{TOKEN}}"
-order: 4471807828023731
+order: 2180352117864581
