@@ -56,10 +56,6 @@ class AttendeeController extends Controller implements HasMiddleware
     // Not setting $event to Event to not load it since we don't need it here
     public function destroy(Event $event, Attendee $attendee)
     {
-        if (Gate::denies('delete-attendee', $event, $attendee)) {
-            abort(403, 'You are not authorized to do this action');
-        }
-
         $attendee->delete();
 
         return response(status: 204);
@@ -69,7 +65,13 @@ class AttendeeController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('auth:sanctum', except: ['index', 'show', 'update'])
+            new Middleware('auth:sanctum', except: ['index', 'show', 'update']),
+
+            new Middleware('can:viewAny,' . Event::class, only: ['index']),
+            new Middleware('can:view,event', only: ['show']),
+            new Middleware('can:create,' . Event::class, only: ['create', 'store']),
+            new Middleware('can:update,event', only: ['edit', 'update']),
+            new Middleware('can:delete,event', only: ['destroy'])
         ];
     }
 }
